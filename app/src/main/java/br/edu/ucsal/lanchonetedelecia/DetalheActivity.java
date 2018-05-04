@@ -19,8 +19,21 @@ public class DetalheActivity extends AppCompatActivity {
             produtoNome = intent.getStringExtra("produto_nome");
         }
 
-        TextView textView = this.findViewById(R.id.text_view_nome);
-        textView.setText(produtoNome);
+        TextView textViewNome = this.findViewById(R.id.text_view_nome);
+        textViewNome.setText(produtoNome);
+
+        String produtoPreco = "";
+        if (intent.hasExtra("produto_preco")) {
+            produtoPreco = intent.getStringExtra("produto_preco");
+        }
+
+        TextView textViewPreco = (TextView)this.findViewById(R.id.text_view_preco);
+        textViewPreco.setText(produtoPreco);
+
+        String url="";
+        if (intent.hasExtra("produto_urk")){
+            
+        }
     }
 
 

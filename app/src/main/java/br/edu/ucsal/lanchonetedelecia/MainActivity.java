@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Lista
+        ListView listView = (ListView)this.findViewById(R.id.listLista);
+
+        final ArrayList<Produto> produto_list = new ArrayList<>();
+//        produto_list.add("Suco Onda Tropical");
+//        produto_list.add("Vitamina Planetaria");
+//        produto_list.add("Hamburguer Exagerado");
+//        produto_list.add("Pastel Super");
+//        produto_list.add("Empada Olho Grande");
+//        produto_list.add("Boliviano Quente");
+//        produto_list.add("Quibe POP");
+//        produto_list.add("Pao de Nuvem");
+
+        final ArrayAdapter<Produto> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                produtos
+        );
+
+        listView.setAdapter(adapter);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(
@@ -43,38 +65,27 @@ public class MainActivity extends AppCompatActivity {
 
                         Gson gson = new GsonBuilder().create();
                         produtos = gson.fromJson(response, Produto[].class);
+                        adapter.clear();
+                        for (Produto p : produtos
+                                ) {
+                            adapter.add(p);
+                        }
+
                     }
                 }
         );
-
-        //Lista
-        ListView listView = (ListView)this.findViewById(R.id.listLista);
-
-        final ArrayList<String> produto_list = new ArrayList<>();
-        produto_list.add("Suco Onda Tropical");
-        produto_list.add("Vitamina Planetaria");
-        produto_list.add("Hamburguer Exagerado");
-        produto_list.add("Pastel Super");
-        produto_list.add("Empada Olho Grande");
-        produto_list.add("Boliviano Quente");
-        produto_list.add("Quibe POP");
-        produto_list.add("Pao de Nuvem");
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                produto_list
-        );
-
-        listView.setAdapter(adapter);
 
         // Aqui o this puro nao funciona pois está dentro da classe anonima
         // O i é a posição na lista
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 Intent detalheIntent = new Intent(MainActivity.this,DetalheActivity.class);
-                detalheIntent.putExtra("produto_nome", produto_list.get(i));
+                detalheIntent.putExtra("produto_nome", produtos[i].getNome());
+
+                detalheIntent.putExtra("produto", (Serializable) produtos[i]);
+
                 startActivity(detalheIntent);
             }
         });
