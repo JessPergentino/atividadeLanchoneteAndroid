@@ -3,6 +3,7 @@ package br.edu.ucsal.lanchonetedelecia;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DetalheActivity extends AppCompatActivity {
@@ -32,8 +33,12 @@ public class DetalheActivity extends AppCompatActivity {
 
         String url="";
         if (intent.hasExtra("produto_urk")){
-            
+            url = intent.getStringExtra("produto_url");
         }
+
+        ImageView imageView = (ImageView) findViewById(R.id.text_view_imagem);
+
+        Picasso.vith(this).load(url).into(imageView);
     }
 
 
