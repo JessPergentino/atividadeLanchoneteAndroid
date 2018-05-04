@@ -3,20 +3,49 @@ package br.edu.ucsal.lanchonetedelecia;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Produto[] produtos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(
+
+                "https://patra-backend.appspot.com/produtos", new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String response, Throwable throwable) {
+                        Log.d("AsyncHttpClient", "reponse = " + response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String response) {
+                        Log.d("AsyncHttpClient", "reponse = " + response);
+
+                        Gson gson = new GsonBuilder().create();
+                        produtos = gson.fromJson(response, Produto[].class);
+                    }
+                }
+        );
 
         //Lista
         ListView listView = (ListView)this.findViewById(R.id.listLista);
